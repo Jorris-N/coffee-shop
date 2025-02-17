@@ -2,8 +2,8 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { FC, useState } from 'react'
-import { Coffee, ShoppingBag, Search, Menu, User } from 'lucide-react'
+import { FC } from 'react'
+
 
 interface Product {
   name: string
@@ -16,20 +16,20 @@ const FeaturedCoffee: Product[] = [
   {
     name: 'San Francisco Blend',
     description: 'A medium roast with notes of chocolate, caramel, and cherry.',
-    image: '/images/sf-blend.jpg',
-    price: '18.99'
+    image: '/images/featured/sf-blend.webp',
+    price: '15.99'
   },
   {
     name: 'Chinatown Blend',
     description: 'A dark roast with notes of cocoa, nuts, and spices.',
-    image: '/images/chinatown-blend.jpg',
-    price: '18.99'
+    image: '/images/featured/chinatown-blend.webp',
+    price: '22.99'
   },
   {
     name: 'Mission District Blend',
     description: 'A light roast with notes of citrus, berries, and florals.',
-    image: '/images/mission-blend.jpg',
-    price: '18.99'
+    image: '/images/featured/mission-blend.png',
+    price: '32.99'
   }
 ]
 
@@ -37,19 +37,19 @@ const BestSellers: Product[] = [
   {
     name: 'Hayes Valley Espresso',
     description: 'Rich and balanced espresso blend from San Francisco.',
-    image: '/images/hayes-valley.jpg',
+    image: '/images/beans/hayes-valley.jpg',
     price: '18.99'
   },
   {
     name: 'Giant Steps Blend',
     description: 'Fruit-forward blend with a smooth finish.',
-    image: '/images/giant-steps.jpg',
+    image: '/images/beans/giant-steps.jpeg',
     price: '18.99'
   },
   {
     name: 'Three Africas Blend',
     description: 'Bright and complex blend with floral and berry notes',
-    image: '/images/three-africas.jpg',
+    image: '/images/beans/three-africas.jpg',
     price: '18.99'
   }
 ]
@@ -58,20 +58,20 @@ const PopularBreakfast: Product[] = [
   {
     name: 'Avocado Toast',
     description: 'Smashed avocado, cherry tomatoes, radishes, and microgreens on multigrain toast.',
-    image: '/images/avocado-toast.jpg',
-    price: '18.99'
+    image: '/images/breakfast/avocado-toast.jpg',
+    price: '12.99'
   },
   {
     name: 'Breakfast Burrito',
     description: 'Scrambled eggs, black beans, pico de gallo, cheddar cheese, and guacamole in a flour tortilla.',
-    image: '/images/breakfast-burrito.jpg',
-    price: '18.99'
+    image: '/images/breakfast/breakfast-burrito.jpg',
+    price: '19.99'
   },
   {
     name: 'Chia Pudding',
     description: 'Chia seeds in almond milk with vanilla, agave, fresh fruit, and granola.',
-    image: '/images/chia-pudding.jpg',
-    price: '18.99'
+    image: '/images/breakfast/chia-pudding.jpg',
+    price: '23.99'
   }
 ]
 
@@ -109,93 +109,6 @@ const ProductSection: FC<{ title: string; products: Product[] }> = ({
   </section>
 )
 
-const Navbar: FC = () => {
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  return (
-    <nav className="fixed top-0 z-50 w-full bg-white/90 backdrop-blur-md">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
-          <div className="flex items-center">
-            <Link href="/" className="flex items-center">
-              <Coffee className="h-8 w-8 text-amber-600" />
-              <span className="ml-2 text-xl font-bold text-gray-600 hover:text-amber-600 ease-in-out duration-500">SF Coffee Co.</span>
-            </Link>
-          </div>
-          <div className="hidden lg:flex lg:items-center lg:space-x-8">
-            <Link href="/shop" className="text-gray-600 hover:text-amber-600 ease-in-out duration-500">Shop</Link>
-            <Link href="/subscriptions" className="text-gray-600 hover:text-amber-600 ease-in-out duration-500">Subscriptions</Link>
-            <Link href="/origins" className="text-gray-600 hover:text-amber-600 ease-in-out duration-500">Samra Origins</Link>
-            <Link href="/learn" className="text-gray-600 hover:text-amber-600 ease-in-out duration-500">Learn</Link>
-            <Link href="/locations" className="text-gray-600 hover:text-amber-600 ease-in-out duration-500">Locations</Link>
-          </div>
-          <div className="flex items-center space-x-4">
-            <button className="rounded-full p-2 hover:bg-gray-100  ease-in-out duration-500">
-              <Search className="h-6 w-6 text-gray-600 hover:text-amber-600 duration-500" />
-            </button>
-            <button className="rounded-full p-2 hover:bg-gray-100  ease-in-out duration-500">
-              <User className="h-6 w-6 text-gray-600 hover:text-amber-600 duration-500" />
-            </button>
-            <button className="rounded-full p-2 hover:bg-gray-100  ease-in-out duration-500">
-              <ShoppingBag className="h-6 w-6 text-gray-600 hover:text-amber-600 duration-500" />
-            </button>
-            <button 
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="rounded-full p-2 hover:bg-gray-100 lg:hidden"
-            >
-              <Menu className="h-6 w-6 text-gray-600" />
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <div 
-        className={`
-          transform overflow-hidden transition-all duration-700 ease-in-out
-          ${isMobileMenuOpen ? 'max-h-96 opacity-100' : 'max-h-0 opacity-0'}
-          lg:hidden
-        `}
-      >
-        <div className={`
-          space-y-1 px-4 pb-3 pt-2 transform transition-transform duration-700
-          ${isMobileMenuOpen ? 'translate-y-0' : '-translate-y-4'}
-        `}>
-          <Link 
-            href="/shop" 
-            className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-amber-600"
-          >
-            Shop
-          </Link>
-          <Link 
-            href="/subscriptions" 
-            className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-amber-600"
-          >
-            Subscriptions
-          </Link>
-          <Link 
-            href="/origins" 
-            className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-amber-600"
-          >
-            Samra Origins
-          </Link>
-          <Link 
-            href="/learn" 
-            className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-amber-600"
-          >
-            Learn
-          </Link>
-          <Link 
-            href="/locations" 
-            className="block rounded-md px-3 py-2 text-base font-medium text-gray-600 hover:bg-gray-100 hover:text-amber-600"
-          >
-            Locations
-          </Link>
-        </div>
-      </div>
-    </nav>
-  );
-}
-
 const Hero: FC = () => (
   <div className="relative h-[520px]">
     <div className="absolute inset-0">
@@ -232,7 +145,6 @@ const Hero: FC = () => (
 const Home: FC = () => {
   return (
     <div className="min-h-screen bg-white">
-      <Navbar />
       <main>
         <Hero />
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
