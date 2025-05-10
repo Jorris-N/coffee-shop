@@ -2,7 +2,8 @@
 
 import { useState } from 'react';
 import Image from 'next/image';
-import { Filter, SlidersHorizontal } from 'lucide-react';
+import { Filter, SlidersHorizontal, Minus, Plus } from 'lucide-react';
+import { Modal } from '@/components/ui/modal';
 
 interface Product {
   id: string;
@@ -13,6 +14,9 @@ interface Product {
   roastType: 'Light' | 'Medium' | 'Dark';
   origin: string;
   weight: string;
+  tastingNotes?: string[];
+  processingMethod?: string;
+  elevation?: string;
 }
 
 const products: Product[] = [
@@ -24,7 +28,10 @@ const products: Product[] = [
     image: '/images/featured/sf-blend.webp',
     roastType: 'Dark',
     origin: 'Brazil, Ethiopia',
-    weight: '12 oz'
+    weight: '12 oz',
+    tastingNotes: ['Chocolate', 'Caramel', 'Orange'],
+    processingMethod: 'Washed',
+    elevation: '1,200-1,800 meters'
   },
   {
     id: '2',
@@ -34,7 +41,10 @@ const products: Product[] = [
     image: '/images/featured/chinatown-blend.webp',
     roastType: 'Medium',
     origin: 'Indonesia, Ethiopia',
-    weight: '12 oz'
+    weight: '12 oz',
+    tastingNotes: ['Berry', 'Dark Chocolate', 'Spice'],
+    processingMethod: 'Natural',
+    elevation: '1,500-2,000 meters'
   },
   {
     id: '3',
@@ -44,7 +54,10 @@ const products: Product[] = [
     image: '/images/featured/mission-blend.png',
     roastType: 'Light',
     origin: 'Ethiopia, Kenya, Uganda',
-    weight: '12 oz'
+    weight: '12 oz',
+    tastingNotes: ['Floral', 'Berry', 'Citrus'],
+    processingMethod: 'Washed/Natural',
+    elevation: '1,700-2,200 meters'
   }
 ];
 
@@ -52,6 +65,8 @@ export default function ShopPage() {
   const [selectedRoast, setSelectedRoast] = useState<string>('all');
   const [showFilters, setShowFilters] = useState(false);
   const [sortBy, setSortBy] = useState<'price-asc' | 'price-desc' | 'name'>('name');
+  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [quantity, setQuantity] = useState(1);
 
   const filteredProducts = products
     .filter(product => selectedRoast === 'all' || product.roastType.toLowerCase() === selectedRoast)
@@ -67,6 +82,10 @@ export default function ShopPage() {
           return 0;
       }
     });
+
+  const handleQuantityChange = (change: number) => {
+    setQuantity(Math.max(1, quantity + change));
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pt-20">
@@ -117,7 +136,11 @@ export default function ShopPage() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {filteredProducts.map((product) => (
-            <div key={product.id} className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow">
+            <div
+              key={product.id}
+              className="bg-white rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow cursor-pointer"
+              onClick={() => setSelectedProduct(product)}
+            >
               <div className="relative h-64">
                 <Image
                   src={product.image}
@@ -138,13 +161,76 @@ export default function ShopPage() {
                   </div>
                   <span className="text-lg font-semibold text-amber-600">${product.price}</span>
                 </div>
-                <button className="mt-4 w-full bg-amber-600 text-white py-2 rounded-lg hover:bg-amber-700 transition-colors">
-                  Add to Cart
-                </button>
               </div>
             </div>
           ))}
         </div>
+
+        {selectedProduct && (
+          <Modal
+            isOpen={!!selectedProduct}
+            onClose={() => {
+              setSelectedProduct(null);
+              setQuantity(1);
+            }}
+            title={selectedProduct.name}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="relative h-[300px] md:h-full rounded-lg overflow-hidden">
+                <Image
+                  src={selectedProduct.image}
+                  alt={selectedProduct.name}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div>
+                <p className="text-gray-600 mb-4">{selectedProduct.description}</p>
+                <div className="space-y-4">
+                  <div>
+                    <h4 className="font-semibold mb-2">Tasting Notes</h4>
+                    <div className="flex flex-wrap gap-2">
+                      {selectedProduct.tastingNotes?.map((note) => (
+                        <span
+                          key={note}
+                          className="px-3 py-1 bg-amber-100 text-amber-800 rounded-full text-sm"
+                        >
+                          {note}
+                        </span>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <p><span className="font-semibold">Origin:</span> {selectedProduct.origin}</p>
+                    <p><span className="font-semibold">Process:</span> {selectedProduct.processingMethod}</p>
+                    <p><span className="font-semibold">Elevation:</span> {selectedProduct.elevation}</p>
+                    <p><span className="font-semibold">Roast:</span> {selectedProduct.roastType}</p>
+                  </div>
+                  <div className="flex items-center gap-4">
+                    <div className="flex items-center border rounded-lg">
+                      <button
+                        onClick={() => handleQuantityChange(-1)}
+                        className="p-2 hover:bg-gray-100"
+                      >
+                        <Minus className="h-4 w-4" />
+                      </button>
+                      <span className="px-4">{quantity}</span>
+                      <button
+                        onClick={() => handleQuantityChange(1)}
+                        className="p-2 hover:bg-gray-100"
+                      >
+                        <Plus className="h-4 w-4" />
+                      </button>
+                    </div>
+                    <button className="flex-1 bg-amber-600 text-white py-2 px-4 rounded-lg hover:bg-amber-700 transition-colors">
+                      Add to Cart - ${(selectedProduct.price * quantity).toFixed(2)}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Modal>
+        )}
       </div>
     </div>
   );
