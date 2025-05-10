@@ -21,7 +21,7 @@ const products: Product[] = [
     name: 'Hayes Valley Espresso',
     price: 18.99,
     description: 'Rich and balanced espresso blend from San Francisco.',
-    image: '/images/beans/hayes-valley.jpg',
+    image: '/images/featured/sf-blend.webp',
     roastType: 'Dark',
     origin: 'Brazil, Ethiopia',
     weight: '12 oz'
@@ -31,7 +31,7 @@ const products: Product[] = [
     name: 'Giant Steps Blend',
     price: 18.99,
     description: 'Fruit-forward blend with a smooth finish.',
-    image: '/images/beans/giant-steps.jpeg',
+    image: '/images/featured/chinatown-blend.webp',
     roastType: 'Medium',
     origin: 'Indonesia, Ethiopia',
     weight: '12 oz'
@@ -41,7 +41,7 @@ const products: Product[] = [
     name: 'Three Africas Blend',
     price: 18.99,
     description: 'Bright and complex blend with floral and berry notes',
-    image: '/images/beans/three-africas.jpg',
+    image: '/images/featured/mission-blend.png',
     roastType: 'Light',
     origin: 'Ethiopia, Kenya, Uganda',
     weight: '12 oz'
@@ -124,6 +124,7 @@ export default function ShopPage() {
                   alt={product.name}
                   fill
                   className="object-cover"
+                  priority
                 />
               </div>
               <div className="p-6">
